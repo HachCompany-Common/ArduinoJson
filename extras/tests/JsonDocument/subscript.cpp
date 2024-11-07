@@ -34,6 +34,21 @@ TEST_CASE("JsonDocument::operator[]") {
       REQUIRE((doc["hello"] | "nope") == "world"_s);
       REQUIRE((doc["world"] | "nope") == "nope"_s);
     }
+
+#if defined(HAS_VARIABLE_LENGTH_ARRAY) && \
+    !defined(SUBSCRIPT_CONFLICTS_WITH_BUILTIN_OPERATOR)
+    SECTION("supports VLAs") {
+      size_t i = 16;
+      char vla[i];
+      strcpy(vla, "hello");
+
+      doc[vla] = "world";
+
+      REQUIRE(doc[vla] == "world");
+      REQUIRE(cdoc[vla] == "world");
+      REQUIRE(doc.as<std::string>() == "{\"hello\":\"world\"}");
+    }
+#endif
   }
 
   SECTION("array") {
