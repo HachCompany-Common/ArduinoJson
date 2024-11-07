@@ -5,6 +5,7 @@ HEAD
 ----
 
 * Forbid `deserializeJson(JsonArray|JsonObject, ...)` (issue #2135)
+* Fix VLA support in `JsonDocument::set()`
 
 v7.2.0 (2024-09-18)
 ------

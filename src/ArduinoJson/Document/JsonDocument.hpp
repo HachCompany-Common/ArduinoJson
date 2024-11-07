@@ -142,6 +142,13 @@ class JsonDocument : public detail::VariantOperators<const JsonDocument&> {
     return to<JsonVariant>().set(src);
   }
 
+  // Replaces the root with the specified value.
+  // https://arduinojson.org/v7/api/jsondocument/set/
+  template <typename TChar>
+  bool set(TChar* src) {
+    return to<JsonVariant>().set(src);
+  }
+
   // Clears the document and converts it to the specified type.
   // https://arduinojson.org/v7/api/jsondocument/to/
   template <typename T>
