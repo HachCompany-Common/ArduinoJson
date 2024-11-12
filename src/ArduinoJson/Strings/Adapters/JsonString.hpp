@@ -10,25 +10,12 @@
 
 ARDUINOJSON_BEGIN_PRIVATE_NAMESPACE
 
-class JsonStringAdapter : public SizedRamString {
- public:
-  JsonStringAdapter(const JsonString& s)
-      : SizedRamString(s.c_str(), s.size()), linked_(s.isLinked()) {}
-
-  bool isLinked() const {
-    return linked_;
-  }
-
- private:
-  bool linked_;
-};
-
 template <>
 struct StringAdapter<JsonString> {
-  using AdaptedString = JsonStringAdapter;
+  using AdaptedString = RamString;
 
   static AdaptedString adapt(const JsonString& s) {
-    return AdaptedString(s);
+    return AdaptedString(s.c_str(), s.size(), s.isLinked());
   }
 };
 
