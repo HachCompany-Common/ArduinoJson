@@ -102,31 +102,31 @@ class JsonObject : public detail::VariantOperators<JsonObject> {
   // Gets or sets the member with specified key.
   // https://arduinojson.org/v7/api/jsonobject/subscript/
   template <typename TString>
-  detail::enable_if_t<detail::IsString<TString>::value,
-                      detail::MemberProxy<JsonObject, TString>>
+  detail::enable_if_t<
+      detail::IsString<TString>::value,
+      detail::MemberProxy<JsonObject, detail::AdaptedString<TString>>>
   operator[](const TString& key) const {
-    return {*this, key};
+    return {*this, detail::adaptString(key)};
   }
 
   // Gets or sets the member with specified key.
   // https://arduinojson.org/v7/api/jsonobject/subscript/
   template <typename TChar>
-  detail::enable_if_t<detail::IsString<TChar*>::value,
-                      detail::MemberProxy<JsonObject, TChar*>>
+  detail::enable_if_t<
+      detail::IsString<TChar*>::value,
+      detail::MemberProxy<JsonObject, detail::AdaptedString<TChar*>>>
   operator[](TChar* key) const {
-    return {*this, key};
+    return {*this, detail::adaptString(key)};
   }
 
   // Gets or sets the member with specified key.
   // https://arduinojson.org/v7/api/jsonobject/subscript/
   template <typename TVariant>
-  detail::enable_if_t<detail::IsVariant<TVariant>::value,
-                      detail::MemberProxy<JsonObject, JsonString>>
+  detail::enable_if_t<
+      detail::IsVariant<TVariant>::value,
+      detail::MemberProxy<JsonObject, detail::AdaptedString<JsonString>>>
   operator[](const TVariant& key) const {
-    if (key.template is<JsonString>())
-      return {*this, key.template as<JsonString>()};
-    else
-      return {*this, nullptr};
+    return {*this, detail::adaptString(key.template as<JsonString>())};
   }
 
   // Removes the member at the specified iterator.

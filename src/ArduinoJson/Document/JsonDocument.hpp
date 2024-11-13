@@ -186,19 +186,21 @@ class JsonDocument : public detail::VariantOperators<const JsonDocument&> {
   // Gets or sets a root object's member.
   // https://arduinojson.org/v7/api/jsondocument/subscript/
   template <typename TString>
-  detail::enable_if_t<detail::IsString<TString>::value,
-                      detail::MemberProxy<JsonDocument&, TString>>
+  detail::enable_if_t<
+      detail::IsString<TString>::value,
+      detail::MemberProxy<JsonDocument&, detail::AdaptedString<TString>>>
   operator[](const TString& key) {
-    return {*this, key};
+    return {*this, detail::adaptString(key)};
   }
 
   // Gets or sets a root object's member.
   // https://arduinojson.org/v7/api/jsondocument/subscript/
   template <typename TChar>
-  detail::enable_if_t<detail::IsString<TChar*>::value,
-                      detail::MemberProxy<JsonDocument&, TChar*>>
+  detail::enable_if_t<
+      detail::IsString<TChar*>::value,
+      detail::MemberProxy<JsonDocument&, detail::AdaptedString<TChar*>>>
   operator[](TChar* key) {
-    return {*this, key};
+    return {*this, detail::adaptString(key)};
   }
 
   // Gets a root object's member.

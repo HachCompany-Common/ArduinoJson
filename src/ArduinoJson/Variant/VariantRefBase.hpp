@@ -188,16 +188,16 @@ class VariantRefBase : public VariantTag {
   // Gets or sets an object member.
   // https://arduinojson.org/v7/api/jsonvariant/subscript/
   template <typename TString>
-  FORCE_INLINE
-      enable_if_t<IsString<TString>::value, MemberProxy<TDerived, TString>>
-      operator[](const TString& key) const;
+  FORCE_INLINE enable_if_t<IsString<TString>::value,
+                           MemberProxy<TDerived, AdaptedString<TString>>>
+  operator[](const TString& key) const;
 
   // Gets or sets an object member.
   // https://arduinojson.org/v7/api/jsonvariant/subscript/
   template <typename TChar>
-  FORCE_INLINE
-      enable_if_t<IsString<TChar*>::value, MemberProxy<TDerived, TChar*>>
-      operator[](TChar* key) const;
+  FORCE_INLINE enable_if_t<IsString<TChar*>::value,
+                           MemberProxy<TDerived, AdaptedString<TChar*>>>
+  operator[](TChar* key) const;
 
   // Gets an object member or an array element.
   // https://arduinojson.org/v7/api/jsonvariant/subscript/

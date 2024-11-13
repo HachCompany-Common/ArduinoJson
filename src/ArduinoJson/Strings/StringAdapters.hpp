@@ -70,4 +70,8 @@ static void stringGetChars(TAdaptedString s, char* p, size_t n) {
   }
 }
 
+template <typename T>
+using AdaptedString =
+    typename StringAdapter<remove_reference_t<T>>::AdaptedString;
+
 ARDUINOJSON_END_PRIVATE_NAMESPACE

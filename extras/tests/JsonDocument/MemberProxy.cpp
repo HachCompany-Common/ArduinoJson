@@ -14,12 +14,9 @@
 using ArduinoJson::detail::sizeofArray;
 using ArduinoJson::detail::sizeofObject;
 
-using MemberProxy =
-    ArduinoJson::detail::MemberProxy<JsonDocument&, const char*>;
-
 TEST_CASE("MemberProxy::add()") {
   JsonDocument doc;
-  MemberProxy mp = doc["hello"];
+  auto mp = doc["hello"];
 
   SECTION("add(int)") {
     mp.add(42);
@@ -48,7 +45,7 @@ TEST_CASE("MemberProxy::add()") {
 
 TEST_CASE("MemberProxy::clear()") {
   JsonDocument doc;
-  MemberProxy mp = doc["hello"];
+  auto mp = doc["hello"];
 
   SECTION("size goes back to zero") {
     mp.add(42);
@@ -139,7 +136,7 @@ TEST_CASE("MemberProxy::operator|()") {
 
 TEST_CASE("MemberProxy::remove()") {
   JsonDocument doc;
-  MemberProxy mp = doc["hello"];
+  auto mp = doc["hello"];
 
   SECTION("remove(int)") {
     mp.add(1);
@@ -186,7 +183,7 @@ TEST_CASE("MemberProxy::remove()") {
 
 TEST_CASE("MemberProxy::set()") {
   JsonDocument doc;
-  MemberProxy mp = doc["hello"];
+  auto mp = doc["hello"];
 
   SECTION("set(int)") {
     mp.set(42);
@@ -223,7 +220,7 @@ TEST_CASE("MemberProxy::set()") {
 
 TEST_CASE("MemberProxy::size()") {
   JsonDocument doc;
-  MemberProxy mp = doc["hello"];
+  auto mp = doc["hello"];
 
   SECTION("returns 0") {
     REQUIRE(mp.size() == 0);
@@ -246,7 +243,7 @@ TEST_CASE("MemberProxy::size()") {
 
 TEST_CASE("MemberProxy::operator[]") {
   JsonDocument doc;
-  MemberProxy mp = doc["hello"];
+  auto mp = doc["hello"];
 
   SECTION("set member") {
     mp["world"] = 42;
@@ -265,7 +262,7 @@ TEST_CASE("MemberProxy cast to JsonVariantConst") {
   JsonDocument doc;
   doc["hello"] = "world";
 
-  const MemberProxy mp = doc["hello"];
+  const auto mp = doc["hello"];
 
   JsonVariantConst var = mp;
 
@@ -276,7 +273,7 @@ TEST_CASE("MemberProxy cast to JsonVariant") {
   JsonDocument doc;
   doc["hello"] = "world";
 
-  MemberProxy mp = doc["hello"];
+  auto mp = doc["hello"];
 
   JsonVariant var = mp;
 
