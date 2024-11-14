@@ -41,18 +41,6 @@ class ZeroTerminatedRamString {
     return str_;
   }
 
-  friend int stringCompare(ZeroTerminatedRamString a,
-                           ZeroTerminatedRamString b) {
-    ARDUINOJSON_ASSERT(!a.isNull());
-    ARDUINOJSON_ASSERT(!b.isNull());
-    return ::strcmp(a.str_, b.str_);
-  }
-
-  friend bool stringEquals(ZeroTerminatedRamString a,
-                           ZeroTerminatedRamString b) {
-    return stringCompare(a, b) == 0;
-  }
-
   bool isLinked() const {
     return false;
   }
