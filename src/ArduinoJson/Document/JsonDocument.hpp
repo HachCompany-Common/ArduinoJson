@@ -239,8 +239,8 @@ class JsonDocument : public detail::VariantOperators<const JsonDocument&> {
   template <typename TVariant>
   detail::enable_if_t<detail::IsVariant<TVariant>::value, JsonVariantConst>
   operator[](const TVariant& key) const {
-    if (key.template is<const char*>())
-      return operator[](key.template as<const char*>());
+    if (key.template is<JsonString>())
+      return operator[](key.template as<JsonString>());
     if (key.template is<size_t>())
       return operator[](key.template as<size_t>());
     return {};
