@@ -1,8 +1,8 @@
 ArduinoJson: change log
 =======================
 
-HEAD
-----
+v7.2.1 (2024-11-15)
+------
 
 * Forbid `deserializeJson(JsonArray|JsonObject, ...)` (issue #2135)
 * Fix VLA support in `JsonDocument::set()`
