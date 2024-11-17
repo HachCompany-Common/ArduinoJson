@@ -1,6 +1,11 @@
 ArduinoJson: change log
 =======================
 
+HEAD
+----
+
+* Fix support for NUL characters in `deserializeJson()`
+
 v7.2.1 (2024-11-15)
 ------
 
