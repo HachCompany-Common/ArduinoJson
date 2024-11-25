@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <ArduinoJson/Strings/Adapters/RamString.hpp>
+
 #if ARDUINOJSON_ENABLE_STD_STREAM
 #  include <ostream>
 #endif
@@ -80,5 +82,16 @@ class JsonString {
  private:
   detail::RamString str_;
 };
+
+namespace detail {
+template <>
+struct StringAdapter<JsonString> {
+  using AdaptedString = RamString;
+
+  static const AdaptedString& adapt(const JsonString& s) {
+    return s.str_;
+  }
+};
+}  // namespace detail
 
 ARDUINOJSON_END_PUBLIC_NAMESPACE

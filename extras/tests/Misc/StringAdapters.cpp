@@ -5,6 +5,7 @@
 #include <Arduino.h>
 
 #include <ArduinoJson/Strings/IsString.hpp>
+#include <ArduinoJson/Strings/JsonString.hpp>
 #include <ArduinoJson/Strings/StringAdapters.hpp>
 
 #include <catch.hpp>
