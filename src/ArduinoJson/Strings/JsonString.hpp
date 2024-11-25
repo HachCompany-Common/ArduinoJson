@@ -13,54 +13,56 @@ ARDUINOJSON_BEGIN_PUBLIC_NAMESPACE
 // A string.
 // https://arduinojson.org/v7/api/jsonstring/
 class JsonString {
+  friend struct detail::StringAdapter<JsonString>;
+
  public:
   enum Ownership { Copied, Linked };
 
-  JsonString() : data_(0), size_(0), ownership_(Linked) {}
+  JsonString() : str_(nullptr, 0, true) {}
 
   JsonString(const char* data, Ownership ownership = Linked)
-      : data_(data), size_(data ? ::strlen(data) : 0), ownership_(ownership) {}
+      : str_(data, data ? ::strlen(data) : 0, ownership == Linked) {}
 
   JsonString(const char* data, size_t sz, Ownership ownership = Linked)
-      : data_(data), size_(sz), ownership_(ownership) {}
+      : str_(data, sz, ownership == Linked) {}
 
   // Returns a pointer to the characters.
   const char* c_str() const {
-    return data_;
+    return str_.data();
   }
 
   // Returns true if the string is null.
   bool isNull() const {
-    return !data_;
+    return str_.isNull();
   }
 
   // Returns true if the string is stored by address.
   // Returns false if the string is stored by copy.
   bool isLinked() const {
-    return ownership_ == Linked;
+    return str_.isLinked();
   }
 
   // Returns length of the string.
   size_t size() const {
-    return size_;
+    return str_.size();
   }
 
   // Returns true if the string is non-null
   explicit operator bool() const {
-    return data_ != 0;
+    return str_.data() != 0;
   }
 
   // Returns true if strings are equal.
   friend bool operator==(JsonString lhs, JsonString rhs) {
-    if (lhs.size_ != rhs.size_)
+    if (lhs.size() != rhs.size())
       return false;
-    if (lhs.data_ == rhs.data_)
+    if (lhs.c_str() == rhs.c_str())
       return true;
-    if (!lhs.data_)
+    if (!lhs.c_str())
       return false;
-    if (!rhs.data_)
+    if (!rhs.c_str())
       return false;
-    return memcmp(lhs.data_, rhs.data_, lhs.size_) == 0;
+    return memcmp(lhs.c_str(), rhs.c_str(), lhs.size()) == 0;
   }
 
   // Returns true if strings differs.
@@ -76,9 +78,7 @@ class JsonString {
 #endif
 
  private:
-  const char* data_;
-  size_t size_;
-  Ownership ownership_;
+  detail::RamString str_;
 };
 
 ARDUINOJSON_END_PUBLIC_NAMESPACE

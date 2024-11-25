@@ -14,8 +14,8 @@ template <>
 struct StringAdapter<JsonString> {
   using AdaptedString = RamString;
 
-  static AdaptedString adapt(const JsonString& s) {
-    return AdaptedString(s.c_str(), s.size(), s.isLinked());
+  static const AdaptedString& adapt(const JsonString& s) {
+    return s.str_;
   }
 };
 
