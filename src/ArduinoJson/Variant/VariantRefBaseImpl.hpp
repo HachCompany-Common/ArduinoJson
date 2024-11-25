@@ -119,7 +119,7 @@ inline bool VariantRefBase<TDerived>::is() const {
 template <typename TDerived>
 inline ElementProxy<TDerived> VariantRefBase<TDerived>::operator[](
     size_t index) const {
-  return ElementProxy<TDerived>(derived(), index);
+  return {derived(), index};
 }
 
 template <typename TDerived>

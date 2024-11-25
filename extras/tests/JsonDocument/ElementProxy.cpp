@@ -12,7 +12,7 @@ using ElementProxy = ArduinoJson::detail::ElementProxy<JsonDocument&>;
 TEST_CASE("ElementProxy::add()") {
   JsonDocument doc;
   doc.add<JsonVariant>();
-  ElementProxy ep = doc[0];
+  const ElementProxy& ep = doc[0];
 
   SECTION("add(int)") {
     ep.add(42);
@@ -50,7 +50,7 @@ TEST_CASE("ElementProxy::add()") {
 TEST_CASE("ElementProxy::clear()") {
   JsonDocument doc;
   doc.add<JsonVariant>();
-  ElementProxy ep = doc[0];
+  const ElementProxy& ep = doc[0];
 
   SECTION("size goes back to zero") {
     ep.add(42);
@@ -110,7 +110,7 @@ TEST_CASE("ElementProxy::operator==()") {
 TEST_CASE("ElementProxy::remove()") {
   JsonDocument doc;
   doc.add<JsonVariant>();
-  ElementProxy ep = doc[0];
+  const ElementProxy& ep = doc[0];
 
   SECTION("remove(int)") {
     ep.add(1);
@@ -157,7 +157,7 @@ TEST_CASE("ElementProxy::remove()") {
 
 TEST_CASE("ElementProxy::set()") {
   JsonDocument doc;
-  ElementProxy ep = doc[0];
+  const ElementProxy& ep = doc[0];
 
   SECTION("set(int)") {
     ep.set(42);
@@ -195,7 +195,7 @@ TEST_CASE("ElementProxy::set()") {
 TEST_CASE("ElementProxy::size()") {
   JsonDocument doc;
   doc.add<JsonVariant>();
-  ElementProxy ep = doc[0];
+  const ElementProxy& ep = doc[0];
 
   SECTION("returns 0") {
     REQUIRE(ep.size() == 0);
@@ -216,7 +216,7 @@ TEST_CASE("ElementProxy::size()") {
 
 TEST_CASE("ElementProxy::operator[]") {
   JsonDocument doc;
-  ElementProxy ep = doc[1];
+  const ElementProxy& ep = doc[1];
 
   SECTION("set member") {
     ep["world"] = 42;
@@ -247,7 +247,7 @@ TEST_CASE("ElementProxy cast to JsonVariantConst") {
   JsonDocument doc;
   doc[0] = "world";
 
-  const ElementProxy ep = doc[0];
+  const ElementProxy& ep = doc[0];
 
   JsonVariantConst var = ep;
 
@@ -258,7 +258,7 @@ TEST_CASE("ElementProxy cast to JsonVariant") {
   JsonDocument doc;
   doc[0] = "world";
 
-  ElementProxy ep = doc[0];
+  const ElementProxy& ep = doc[0];
 
   JsonVariant var = ep;
 

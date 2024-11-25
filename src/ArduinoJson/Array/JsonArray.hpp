@@ -116,7 +116,7 @@ class JsonArray : public detail::VariantOperators<JsonArray> {
   // https://arduinojson.org/v7/api/jsonarray/remove/
   template <typename TVariant>
   detail::enable_if_t<detail::IsVariant<TVariant>::value> remove(
-      TVariant variant) const {
+      const TVariant& variant) const {
     if (variant.template is<size_t>())
       remove(variant.template as<size_t>());
   }
@@ -143,7 +143,7 @@ class JsonArray : public detail::VariantOperators<JsonArray> {
                       detail::ElementProxy<JsonArray>>
   operator[](const TVariant& variant) const {
     if (variant.template is<size_t>())
-      return operator[](variant.template as<size_t>());
+      return {*this, variant.template as<size_t>()};
     else
       return {*this, size_t(-1)};
   }

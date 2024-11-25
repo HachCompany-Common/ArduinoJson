@@ -16,12 +16,17 @@ class MemberProxy
       public VariantOperators<MemberProxy<TUpstream, AdaptedString>> {
   friend class VariantAttorney;
 
+  friend class VariantRefBase<MemberProxy<TUpstream, AdaptedString>>;
+
+  template <typename, typename>
+  friend class MemberProxy;
+
+  template <typename>
+  friend class ElementProxy;
+
  public:
   MemberProxy(TUpstream upstream, AdaptedString key)
       : upstream_(upstream), key_(key) {}
-
-  MemberProxy(const MemberProxy& src)
-      : upstream_(src.upstream_), key_(src.key_) {}
 
   MemberProxy& operator=(const MemberProxy& src) {
     this->set(src);
@@ -41,6 +46,11 @@ class MemberProxy
   }
 
  private:
+  // clang-format off
+  MemberProxy(const MemberProxy& src) // Error here? See https://arduinojson.org/v7/proxy-non-copyable/
+      : upstream_(src.upstream_), key_(src.key_) {}
+  // clang-format on
+
   ResourceManager* getResourceManager() const {
     return VariantAttorney::getResourceManager(upstream_);
   }
