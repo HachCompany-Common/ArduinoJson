@@ -6,6 +6,7 @@ HEAD
 
 * Fix support for NUL characters in `deserializeJson()`
 * Make `ElementProxy` and `MemberProxy` non-copyable
+* Change string copy policy: only string literal are stored by pointer
 
 > ### BREAKING CHANGES
 >

@@ -66,7 +66,8 @@ class JsonArray : public detail::VariantOperators<JsonArray> {
 
   // Appends a value to the array.
   // https://arduinojson.org/v7/api/jsonarray/add/
-  template <typename T>
+  template <typename T,
+            typename = detail::enable_if_t<!detail::is_const<T>::value>>
   bool add(T* value) const {
     return detail::ArrayData::addValue(data_, value, resources_);
   }

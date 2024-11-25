@@ -144,7 +144,8 @@ class JsonDocument : public detail::VariantOperators<const JsonDocument&> {
 
   // Replaces the root with the specified value.
   // https://arduinojson.org/v7/api/jsondocument/set/
-  template <typename TChar>
+  template <typename TChar,
+            typename = detail::enable_if_t<!detail::is_const<TChar>::value>>
   bool set(TChar* src) {
     return to<JsonVariant>().set(src);
   }
@@ -197,7 +198,7 @@ class JsonDocument : public detail::VariantOperators<const JsonDocument&> {
   // https://arduinojson.org/v7/api/jsondocument/subscript/
   template <typename TChar>
   detail::enable_if_t<
-      detail::IsString<TChar*>::value,
+      detail::IsString<TChar*>::value && !detail::is_const<TChar>::value,
       detail::MemberProxy<JsonDocument&, detail::AdaptedString<TChar*>>>
   operator[](TChar* key) {
     return {*this, detail::adaptString(key)};
@@ -215,7 +216,9 @@ class JsonDocument : public detail::VariantOperators<const JsonDocument&> {
   // Gets a root object's member.
   // https://arduinojson.org/v7/api/jsondocument/subscript/
   template <typename TChar>
-  detail::enable_if_t<detail::IsString<TChar*>::value, JsonVariantConst>
+  detail::enable_if_t<detail::IsString<TChar*>::value &&
+                          !detail::is_const<TChar>::value,
+                      JsonVariantConst>
   operator[](TChar* key) const {
     return JsonVariantConst(
         data_.getMember(detail::adaptString(key), &resources_), &resources_);
@@ -273,7 +276,8 @@ class JsonDocument : public detail::VariantOperators<const JsonDocument&> {
 
   // Appends a value to the root array.
   // https://arduinojson.org/v7/api/jsondocument/add/
-  template <typename TChar>
+  template <typename TChar,
+            typename = detail::enable_if_t<!detail::is_const<TChar>::value>>
   bool add(TChar* value) {
     return data_.addValue(value, &resources_);
   }
@@ -289,7 +293,9 @@ class JsonDocument : public detail::VariantOperators<const JsonDocument&> {
   // Removes a member of the root object.
   // https://arduinojson.org/v7/api/jsondocument/remove/
   template <typename TChar>
-  detail::enable_if_t<detail::IsString<TChar*>::value> remove(TChar* key) {
+  detail::enable_if_t<detail::IsString<TChar*>::value &&
+                      !detail::is_const<TChar>::value>
+  remove(TChar* key) {
     detail::VariantData::removeMember(getData(), detail::adaptString(key),
                                       getResourceManager());
   }

@@ -31,7 +31,7 @@ struct Converter {
     // clang-format on
   }
 
-  static T fromJson(JsonVariantConst src) {
+  static detail::decay_t<T> fromJson(JsonVariantConst src) {
     static_assert(!detail::is_same<T, char*>::value,
                   "type 'char*' is not supported, use 'const char*' instead");
 

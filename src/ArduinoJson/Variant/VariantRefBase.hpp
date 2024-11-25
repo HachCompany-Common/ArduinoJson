@@ -77,12 +77,15 @@ class VariantRefBase : public VariantTag {
   // https://arduinojson.org/v7/api/jsonvariant/set/
   template <typename T>
   bool set(const T& value) const {
-    return doSet<Converter<remove_cv_t<T>>>(value);
+    using TypeForConverter = conditional_t<IsStringLiteral<T>::value, T,
+                                           remove_cv_t<remove_reference_t<T>>>;
+    return doSet<Converter<TypeForConverter>>(value);
   }
 
   // Copies the specified value.
   // https://arduinojson.org/v7/api/jsonvariant/set/
-  template <typename T>
+  template <typename T,
+            typename = detail::enable_if_t<!detail::is_const<T>::value>>
   bool set(T* value) const {
     return doSet<Converter<T*>>(value);
   }
@@ -123,7 +126,7 @@ class VariantRefBase : public VariantTag {
 
   // Appends a value to the array.
   // https://arduinojson.org/v7/api/jsonvariant/add/
-  template <typename T>
+  template <typename T, typename = enable_if_t<!is_const<T>::value>>
   bool add(T* value) const {
     return detail::VariantData::addValue(getOrCreateData(), value,
                                          getResourceManager());
@@ -195,7 +198,7 @@ class VariantRefBase : public VariantTag {
   // Gets or sets an object member.
   // https://arduinojson.org/v7/api/jsonvariant/subscript/
   template <typename TChar>
-  FORCE_INLINE enable_if_t<IsString<TChar*>::value,
+  FORCE_INLINE enable_if_t<IsString<TChar*>::value && !is_const<TChar>::value,
                            MemberProxy<TDerived, AdaptedString<TChar*>>>
   operator[](TChar* key) const;
 

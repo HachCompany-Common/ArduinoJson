@@ -76,6 +76,15 @@ struct StringAdapter<TChar*, enable_if_t<IsChar<TChar>::value>> {
   }
 };
 
+template <size_t N>
+struct StringAdapter<const char (&)[N]> {
+  using AdaptedString = RamString;
+
+  static AdaptedString adapt(const char (&p)[N]) {
+    return RamString(p, N - 1, true);
+  }
+};
+
 template <typename TChar, size_t N>
 struct StringAdapter<TChar[N], enable_if_t<IsChar<TChar>::value>> {
   using AdaptedString = RamString;
@@ -83,15 +92,6 @@ struct StringAdapter<TChar[N], enable_if_t<IsChar<TChar>::value>> {
   static AdaptedString adapt(const TChar* p) {
     auto str = reinterpret_cast<const char*>(p);
     return AdaptedString(str, str ? ::strlen(str) : 0);
-  }
-};
-
-template <>
-struct StringAdapter<const char*, void> {
-  using AdaptedString = RamString;
-
-  static AdaptedString adapt(const char* p) {
-    return AdaptedString(p, p ? ::strlen(p) : 0, true);
   }
 };
 

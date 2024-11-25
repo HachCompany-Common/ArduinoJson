@@ -5,37 +5,60 @@
 #include <ArduinoJson.h>
 #include <catch.hpp>
 
+#include "Allocators.hpp"
 #include "Literals.hpp"
 
 using ElementProxy = ArduinoJson::detail::ElementProxy<JsonDocument&>;
 
 TEST_CASE("ElementProxy::add()") {
-  JsonDocument doc;
+  SpyingAllocator spy;
+  JsonDocument doc(&spy);
   doc.add<JsonVariant>();
   const ElementProxy& ep = doc[0];
 
-  SECTION("add(int)") {
+  SECTION("integer") {
     ep.add(42);
 
     REQUIRE(doc.as<std::string>() == "[[42]]");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                         });
   }
 
-  SECTION("add(const char*)") {
+  SECTION("string literal") {
     ep.add("world");
 
     REQUIRE(doc.as<std::string>() == "[[\"world\"]]");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                         });
   }
 
-  SECTION("add(char[])") {
+  SECTION("const char*") {
+    const char* s = "world";
+    ep.add(s);
+
+    REQUIRE(doc.as<std::string>() == "[[\"world\"]]");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                             Allocate(sizeofString("world")),
+                         });
+  }
+
+  SECTION("char[]") {
     char s[] = "world";
     ep.add(s);
     strcpy(s, "!!!!!");
 
     REQUIRE(doc.as<std::string>() == "[[\"world\"]]");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                             Allocate(sizeofString("world")),
+                         });
   }
 
 #ifdef HAS_VARIABLE_LENGTH_ARRAY
-  SECTION("set(vla)") {
+  SECTION("VLA") {
     size_t i = 8;
     char vla[i];
     strcpy(vla, "world");
@@ -43,6 +66,10 @@ TEST_CASE("ElementProxy::add()") {
     ep.add(vla);
 
     REQUIRE(doc.as<std::string>() == "[[\"world\"]]");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                             Allocate(sizeofString("world")),
+                         });
   }
 #endif
 }

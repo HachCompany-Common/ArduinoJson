@@ -16,20 +16,29 @@ using ArduinoJson::JsonString;
 using namespace ArduinoJson::detail;
 
 TEST_CASE("adaptString()") {
+  SECTION("string literal") {
+    auto s = adaptString("bravo\0alpha");
+
+    CHECK(s.isNull() == false);
+    CHECK(s.size() == 11);
+    CHECK(s.isLinked() == true);
+  }
+
   SECTION("null const char*") {
     auto s = adaptString(static_cast<const char*>(0));
 
     CHECK(s.isNull() == true);
     CHECK(s.size() == 0);
-    CHECK(s.isLinked() == true);
   }
 
   SECTION("non-null const char*") {
-    auto s = adaptString("bravo");
+    const char* p = "bravo";
+    auto s = adaptString(p);
 
     CHECK(s.isNull() == false);
     CHECK(s.size() == 5);
-    CHECK(s.isLinked() == true);
+    CHECK(s.isLinked() == false);
+    CHECK(s.data() == p);
   }
 
   SECTION("null const char* + size") {

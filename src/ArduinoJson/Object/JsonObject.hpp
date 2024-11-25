@@ -113,7 +113,7 @@ class JsonObject : public detail::VariantOperators<JsonObject> {
   // https://arduinojson.org/v7/api/jsonobject/subscript/
   template <typename TChar>
   detail::enable_if_t<
-      detail::IsString<TChar*>::value,
+      detail::IsString<TChar*>::value && !detail::is_const<TChar>::value,
       detail::MemberProxy<JsonObject, detail::AdaptedString<TChar*>>>
   operator[](TChar* key) const {
     return {*this, detail::adaptString(key)};
@@ -175,8 +175,9 @@ class JsonObject : public detail::VariantOperators<JsonObject> {
   // https://arduinojson.org/v7/api/jsonobject/containskey/
   template <typename TChar>
   ARDUINOJSON_DEPRECATED("use obj[\"key\"].is<T>() instead")
-  detail::enable_if_t<detail::IsString<TChar*>::value, bool> containsKey(
-      TChar* key) const {
+  detail::enable_if_t<detail::IsString<TChar*>::value &&
+                          !detail::is_const<TChar>::value,
+                      bool> containsKey(TChar* key) const {
     return detail::ObjectData::getMember(data_, detail::adaptString(key),
                                          resources_) != 0;
   }

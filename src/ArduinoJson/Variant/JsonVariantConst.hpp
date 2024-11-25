@@ -120,7 +120,9 @@ class JsonVariantConst : public detail::VariantTag,
   // Gets object's member with specified key.
   // https://arduinojson.org/v7/api/jsonvariantconst/subscript/
   template <typename TChar>
-  detail::enable_if_t<detail::IsString<TChar*>::value, JsonVariantConst>
+  detail::enable_if_t<detail::IsString<TChar*>::value &&
+                          !detail::is_const<TChar>::value,
+                      JsonVariantConst>
   operator[](TChar* key) const {
     return JsonVariantConst(detail::VariantData::getMember(
                                 data_, detail::adaptString(key), resources_),
@@ -153,8 +155,9 @@ class JsonVariantConst : public detail::VariantTag,
   // https://arduinojson.org/v7/api/jsonvariantconst/containskey/
   template <typename TChar>
   ARDUINOJSON_DEPRECATED("use obj[\"key\"].is<T>() instead")
-  detail::enable_if_t<detail::IsString<TChar*>::value, bool> containsKey(
-      TChar* key) const {
+  detail::enable_if_t<detail::IsString<TChar*>::value &&
+                          !detail::is_const<TChar>::value,
+                      bool> containsKey(TChar* key) const {
     return detail::VariantData::getMember(getData(), detail::adaptString(key),
                                           resources_) != 0;
   }

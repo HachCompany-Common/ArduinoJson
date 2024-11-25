@@ -15,23 +15,53 @@ using ArduinoJson::detail::sizeofArray;
 using ArduinoJson::detail::sizeofObject;
 
 TEST_CASE("MemberProxy::add()") {
-  JsonDocument doc;
+  SpyingAllocator spy;
+  JsonDocument doc(&spy);
   const auto& mp = doc["hello"];
 
-  SECTION("add(int)") {
+  SECTION("integer") {
     mp.add(42);
 
     REQUIRE(doc.as<std::string>() == "{\"hello\":[42]}");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                         });
   }
 
-  SECTION("add(const char*)") {
+  SECTION("string literal") {
     mp.add("world");
 
     REQUIRE(doc.as<std::string>() == "{\"hello\":[\"world\"]}");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                         });
+  }
+
+  SECTION("const char*") {
+    const char* temp = "world";
+    mp.add(temp);
+
+    REQUIRE(doc.as<std::string>() == "{\"hello\":[\"world\"]}");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                             Allocate(sizeofString("world")),
+                         });
+  }
+
+  SECTION("char[]") {
+    char temp[] = "world";
+    mp.add(temp);
+
+    REQUIRE(doc.as<std::string>() == "{\"hello\":[\"world\"]}");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                             Allocate(sizeofString("world")),
+
+                         });
   }
 
 #ifdef HAS_VARIABLE_LENGTH_ARRAY
-  SECTION("add(vla)") {
+  SECTION("VLA") {
     size_t i = 16;
     char vla[i];
     strcpy(vla, "world");
@@ -39,6 +69,10 @@ TEST_CASE("MemberProxy::add()") {
     mp.add(vla);
 
     REQUIRE(doc.as<std::string>() == "{\"hello\":[\"world\"]}");
+    REQUIRE(spy.log() == AllocatorLog{
+                             Allocate(sizeofPool()),
+                             Allocate(sizeofString("world")),
+                         });
   }
 #endif
 }

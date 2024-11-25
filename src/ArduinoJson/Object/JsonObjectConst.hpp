@@ -109,7 +109,9 @@ class JsonObjectConst : public detail::VariantOperators<JsonObjectConst> {
   // Gets the member with specified key.
   // https://arduinojson.org/v7/api/jsonobjectconst/subscript/
   template <typename TChar>
-  detail::enable_if_t<detail::IsString<TChar*>::value, JsonVariantConst>
+  detail::enable_if_t<detail::IsString<TChar*>::value &&
+                          !detail::is_const<TChar>::value,
+                      JsonVariantConst>
   operator[](TChar* key) const {
     return JsonVariantConst(detail::ObjectData::getMember(
                                 data_, detail::adaptString(key), resources_),

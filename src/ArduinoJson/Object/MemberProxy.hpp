@@ -39,7 +39,7 @@ class MemberProxy
     return *this;
   }
 
-  template <typename T>
+  template <typename T, typename = enable_if_t<!is_const<T>::value>>
   MemberProxy& operator=(T* src) {
     this->set(src);
     return *this;

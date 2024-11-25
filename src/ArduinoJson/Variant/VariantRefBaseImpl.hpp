@@ -124,7 +124,7 @@ inline ElementProxy<TDerived> VariantRefBase<TDerived>::operator[](
 
 template <typename TDerived>
 template <typename TChar>
-inline enable_if_t<IsString<TChar*>::value,
+inline enable_if_t<IsString<TChar*>::value && !is_const<TChar>::value,
                    MemberProxy<TDerived, AdaptedString<TChar*>>>
 VariantRefBase<TDerived>::operator[](TChar* key) const {
   return {derived(), adaptString(key)};
