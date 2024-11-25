@@ -140,7 +140,7 @@ VariantRefBase<TDerived>::operator[](const TString& key) const {
 
 template <typename TDerived>
 template <typename TConverter, typename T>
-inline bool VariantRefBase<TDerived>::doSet(T&& value, false_type) const {
+inline bool VariantRefBase<TDerived>::doSet(const T& value, false_type) const {
   TConverter::toJson(value, getOrCreateVariant());
   auto resources = getResourceManager();
   return resources && !resources->overflowed();
@@ -148,7 +148,7 @@ inline bool VariantRefBase<TDerived>::doSet(T&& value, false_type) const {
 
 template <typename TDerived>
 template <typename TConverter, typename T>
-inline bool VariantRefBase<TDerived>::doSet(T&& value, true_type) const {
+inline bool VariantRefBase<TDerived>::doSet(const T& value, true_type) const {
   return TConverter::toJson(value, getOrCreateVariant());
 }
 

@@ -119,14 +119,13 @@ class VariantData {
   }
 
   template <typename T>
-  bool addValue(T&& value, ResourceManager* resources) {
+  bool addValue(const T& value, ResourceManager* resources) {
     auto array = isNull() ? &toArray() : asArray();
-    return detail::ArrayData::addValue(array, detail::forward<T>(value),
-                                       resources);
+    return detail::ArrayData::addValue(array, value, resources);
   }
 
   template <typename T>
-  static bool addValue(VariantData* var, T&& value,
+  static bool addValue(VariantData* var, const T& value,
                        ResourceManager* resources) {
     if (!var)
       return false;

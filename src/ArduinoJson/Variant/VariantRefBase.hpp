@@ -297,19 +297,18 @@ class VariantRefBase : public VariantTag {
   }
 
   template <typename TConverter, typename T>
-  bool doSet(T&& value) const {
+  bool doSet(const T& value) const {
     return doSet<TConverter>(
-        detail::forward<T>(value),
-        is_same<typename function_traits<
-                    decltype(&TConverter::toJson)>::return_type,
-                bool>{});
+        value, is_same<typename function_traits<
+                           decltype(&TConverter::toJson)>::return_type,
+                       bool>{});
   }
 
   template <typename TConverter, typename T>
-  bool doSet(T&& value, false_type) const;
+  bool doSet(const T& value, false_type) const;
 
   template <typename TConverter, typename T>
-  bool doSet(T&& value, true_type) const;
+  bool doSet(const T& value, true_type) const;
 
   ArduinoJson::JsonVariant getOrCreateVariant() const;
 };
