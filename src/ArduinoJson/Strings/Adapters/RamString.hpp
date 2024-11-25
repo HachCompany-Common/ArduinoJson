@@ -20,9 +20,16 @@ struct IsChar
 class RamString {
  public:
   static const size_t typeSortKey = 2;
+#if ARDUINOJSON_SIZEOF_POINTER <= 2
+  static constexpr size_t sizeMask = size_t(-1) >> 1;
+#else
+  static constexpr size_t sizeMask = size_t(-1);
+#endif
 
   RamString(const char* str, size_t sz, bool linked = false)
-      : str_(str), size_(sz), linked_(linked) {}
+      : str_(str), size_(sz & sizeMask), linked_(linked) {
+    ARDUINOJSON_ASSERT(size_ == sz);
+  }
 
   bool isNull() const {
     return !str_;
@@ -48,8 +55,15 @@ class RamString {
 
  protected:
   const char* str_;
+
+#if ARDUINOJSON_SIZEOF_POINTER <= 2
+  // Use a bitfield only on 8-bit microcontrollers
+  size_t size_ : sizeof(size_t) * 8 - 1;
+  bool linked_ : 1;
+#else
   size_t size_;
-  bool linked_;  // TODO: merge with size_
+  bool linked_;
+#endif
 };
 
 template <typename TChar>
