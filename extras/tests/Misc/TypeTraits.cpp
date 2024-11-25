@@ -211,6 +211,15 @@ TEST_CASE("Polyfills/type_traits") {
     CHECK(is_enum<bool>::value == false);
     CHECK(is_enum<double>::value == false);
   }
+
+  SECTION("decay") {
+    CHECK(is_same<decay_t<int>, int>::value);
+    CHECK(is_same<decay_t<int&>, int>::value);
+    CHECK(is_same<decay_t<int&&>, int>::value);
+    CHECK(is_same<decay_t<int[]>, int*>::value);
+    CHECK(is_same<decay_t<int[10]>, int*>::value);
+    CHECK(is_same<decay_t<decltype("toto")>, const char*>::value);
+  }
 }
 
 TEST_CASE("is_std_string") {
