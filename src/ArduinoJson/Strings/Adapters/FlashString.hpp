@@ -63,7 +63,7 @@ class FlashString {
     ::memcpy_P(p, s.str_, n);
   }
 
-  bool isLinked() const {
+  bool isStatic() const {
     return false;
   }
 

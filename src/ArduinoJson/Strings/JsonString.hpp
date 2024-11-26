@@ -42,8 +42,8 @@ class JsonString {
 
   // Returns true if the string is stored by address.
   // Returns false if the string is stored by copy.
-  bool isLinked() const {
-    return str_.isLinked();
+  bool isStatic() const {
+    return str_.isStatic();
   }
 
   // Returns length of the string.

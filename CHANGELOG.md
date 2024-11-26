@@ -9,6 +9,7 @@ HEAD
 * Change string copy policy: only string literal are stored by pointer
 * `JsonString` is now stored by copy, unless specified otherwise
 * Replace undocumented `JsonString::Ownership` with `bool`
+* Rename undocumented `JsonString::isLinked()` to `isStatic()`
 
 > ### BREAKING CHANGES
 >
