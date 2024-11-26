@@ -132,7 +132,7 @@ TEST_CASE("JsonVariant::set() when there is enough memory") {
     char str[16];
 
     strcpy(str, "hello");
-    bool result = variant.set(JsonString(str, JsonString::Linked));
+    bool result = variant.set(JsonString(str, true));
     strcpy(str, "world");
 
     REQUIRE(result == true);
@@ -144,7 +144,7 @@ TEST_CASE("JsonVariant::set() when there is enough memory") {
     char str[16];
 
     strcpy(str, "hello");
-    bool result = variant.set(JsonString(str, JsonString::Copied));
+    bool result = variant.set(JsonString(str));
     strcpy(str, "world");
 
     REQUIRE(result == true);

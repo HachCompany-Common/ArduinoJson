@@ -139,8 +139,7 @@ TEST_CASE("serialize MsgPack value") {
 
   SECTION("str 32") {
     std::string shortest(65536, '?');
-    checkVariant(JsonString(shortest.c_str(),
-                            JsonString::Linked),  // force store by pointer
+    checkVariant(JsonString(shortest.c_str(), true),  // force store by pointer
                  "\xDB\x00\x01\x00\x00"_s + shortest);
   }
 

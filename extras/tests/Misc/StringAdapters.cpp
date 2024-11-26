@@ -101,7 +101,7 @@ TEST_CASE("adaptString()") {
   }
 
   SECTION("JsonString linked") {
-    JsonString orig("hello", JsonString::Ownership::Linked);
+    JsonString orig("hello", true);
     auto s = adaptString(orig);
 
     CHECK(s.isNull() == false);
@@ -110,7 +110,7 @@ TEST_CASE("adaptString()") {
   }
 
   SECTION("JsonString copied") {
-    JsonString orig("hello", JsonString::Ownership::Copied);
+    JsonString orig("hello", false);
     auto s = adaptString(orig);
 
     CHECK(s.isNull() == false);

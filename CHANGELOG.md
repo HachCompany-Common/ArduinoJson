@@ -8,6 +8,7 @@ HEAD
 * Make `ElementProxy` and `MemberProxy` non-copyable
 * Change string copy policy: only string literal are stored by pointer
 * `JsonString` is now stored by copy, unless specified otherwise
+* Replace undocumented `JsonString::Ownership` with `bool`
 
 > ### BREAKING CHANGES
 >

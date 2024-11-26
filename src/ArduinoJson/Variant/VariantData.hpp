@@ -64,13 +64,11 @@ class VariantData {
         return visit.visit(content_.asObject);
 
       case VariantType::LinkedString:
-        return visit.visit(
-            JsonString(content_.asLinkedString, JsonString::Linked));
+        return visit.visit(JsonString(content_.asLinkedString, true));
 
       case VariantType::OwnedString:
         return visit.visit(JsonString(content_.asOwnedString->data,
-                                      content_.asOwnedString->length,
-                                      JsonString::Copied));
+                                      content_.asOwnedString->length));
 
       case VariantType::RawString:
         return visit.visit(RawString(content_.asOwnedString->data,
@@ -262,7 +260,7 @@ class VariantData {
     switch (type_) {
       case VariantType::RawString:
         return JsonString(content_.asOwnedString->data,
-                          content_.asOwnedString->length, JsonString::Copied);
+                          content_.asOwnedString->length);
       default:
         return JsonString();
     }
@@ -271,10 +269,10 @@ class VariantData {
   JsonString asString() const {
     switch (type_) {
       case VariantType::LinkedString:
-        return JsonString(content_.asLinkedString, JsonString::Linked);
+        return JsonString(content_.asLinkedString, true);
       case VariantType::OwnedString:
         return JsonString(content_.asOwnedString->data,
-                          content_.asOwnedString->length, JsonString::Copied);
+                          content_.asOwnedString->length);
       default:
         return JsonString();
     }
