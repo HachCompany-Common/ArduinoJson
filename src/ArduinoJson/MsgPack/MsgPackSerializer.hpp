@@ -96,7 +96,7 @@ class MsgPackSerializer : public VariantDataVisitor<size_t> {
   }
 
   size_t visit(JsonString value) {
-    ARDUINOJSON_ASSERT(value != NULL);
+    ARDUINOJSON_ASSERT(!value.isNull());
 
     auto n = value.size();
 

@@ -96,7 +96,7 @@ TEST_CASE("JsonString") {
     JsonString s("hello world", 5);
 
     CHECK(s.size() == 5);
-    CHECK(s.isLinked() == true);
+    CHECK(s.isLinked() == false);
     CHECK(s == "hello");
     CHECK(s != "hello world");
   }

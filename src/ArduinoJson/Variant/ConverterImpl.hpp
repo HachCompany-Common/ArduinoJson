@@ -178,7 +178,7 @@ struct Converter<JsonString> : private detail::VariantAttorney {
 
   static JsonString fromJson(JsonVariantConst src) {
     auto data = getData(src);
-    return data ? data->asString() : 0;
+    return data ? data->asString() : JsonString();
   }
 
   static bool checkJson(JsonVariantConst src) {

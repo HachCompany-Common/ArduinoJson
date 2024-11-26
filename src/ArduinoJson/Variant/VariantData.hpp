@@ -64,7 +64,8 @@ class VariantData {
         return visit.visit(content_.asObject);
 
       case VariantType::LinkedString:
-        return visit.visit(JsonString(content_.asLinkedString));
+        return visit.visit(
+            JsonString(content_.asLinkedString, JsonString::Linked));
 
       case VariantType::OwnedString:
         return visit.visit(JsonString(content_.asOwnedString->data,

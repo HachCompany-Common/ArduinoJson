@@ -22,10 +22,10 @@ class JsonString {
 
   JsonString() : str_(nullptr, 0, true) {}
 
-  JsonString(const char* data, Ownership ownership = Linked)
+  JsonString(const char* data, Ownership ownership = Copied)
       : str_(data, data ? ::strlen(data) : 0, ownership == Linked) {}
 
-  JsonString(const char* data, size_t sz, Ownership ownership = Linked)
+  JsonString(const char* data, size_t sz, Ownership ownership = Copied)
       : str_(data, sz, ownership == Linked) {}
 
   // Returns a pointer to the characters.
