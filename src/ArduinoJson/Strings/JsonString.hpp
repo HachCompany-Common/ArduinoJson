@@ -24,9 +24,10 @@ class JsonString {
   JsonString(const char* data, bool isStatic = false)
       : str_(data, data ? ::strlen(data) : 0, isStatic) {}
 
-  template <typename TSize, typename = detail::enable_if_t<
-                                detail::is_integral<TSize>::value &&
-                                !detail::is_same<TSize, bool>::value>>
+  template <typename TSize,
+            detail::enable_if_t<detail::is_integral<TSize>::value &&
+                                    !detail::is_same<TSize, bool>::value,
+                                int> = 0>
   JsonString(const char* data, TSize sz, bool isStatic = false)
       : str_(data, size_t(sz), isStatic) {}
 

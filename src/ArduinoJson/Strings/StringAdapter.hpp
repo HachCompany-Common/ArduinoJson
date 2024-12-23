@@ -34,7 +34,7 @@ AdaptedString<TString> adaptString(TString&& s) {
   return StringAdapterFor<TString>::adapt(detail::forward<TString>(s));
 }
 
-template <typename TChar, typename = enable_if_t<!is_const<TChar>::value>>
+template <typename TChar, enable_if_t<!is_const<TChar>::value, int> = 0>
 AdaptedString<TChar*> adaptString(TChar* p) {
   return StringAdapter<TChar*>::adapt(p);
 }

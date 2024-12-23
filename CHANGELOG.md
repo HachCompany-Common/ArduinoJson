@@ -10,6 +10,7 @@ HEAD
 * `JsonString` is now stored by copy, unless specified otherwise
 * Replace undocumented `JsonString::Ownership` with `bool`
 * Rename undocumented `JsonString::isLinked()` to `isStatic()`
+* Move public facing SFINAEs to template declarations
 
 > ### BREAKING CHANGES
 >
