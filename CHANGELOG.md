@@ -1,8 +1,8 @@
 ArduinoJson: change log
 =======================
 
-HEAD
-----
+v7.3.0 (2024-12-29)
+------
 
 * Fix support for NUL characters in `deserializeJson()`
 * Make `ElementProxy` and `MemberProxy` non-copyable
