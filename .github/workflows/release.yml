@@ -21,7 +21,13 @@ jobs:
         id: body
         run: |
           FILENAME=RELEASE.md
-          extras/scripts/get-release-body.sh ${{ steps.init.outputs.tag }} CHANGELOG.md | tee $FILENAME
+          tee $FILENAME <<END
+          ## Changes
+
+          $(extras/scripts/extract_changes.awk CHANGELOG.md)
+
+          [View version history](https://github.com/bblanchon/ArduinoJson/blob/${{ steps.init.outputs.tag }}/CHANGELOG.md)
+          END
           echo "filename=$FILENAME" >> $GITHUB_OUTPUT
       - name: Amalgamate ArduinoJson.h
         id: amalgamate_h
